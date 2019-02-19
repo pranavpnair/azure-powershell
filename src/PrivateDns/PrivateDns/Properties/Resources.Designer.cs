@@ -9,6 +9,8 @@
 //------------------------------------------------------------------------------
 
 namespace Microsoft.Azure.Commands.PrivateDns.Properties {
+    using System;
+    
     
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
@@ -17,7 +19,7 @@ namespace Microsoft.Azure.Commands.PrivateDns.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -149,6 +151,15 @@ namespace Microsoft.Azure.Commands.PrivateDns.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot remove record of type {0} from a record set of type {1}. Removal of this record type is not allowed..
+        /// </summary>
+        internal static string Error_RemoveRecordTypeNotAllowed {
+            get {
+                return ResourceManager.GetString("Error_RemoveRecordTypeNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The parameter set {0} of cmdlet is unknown.
         /// </summary>
         internal static string Error_UnknownParameterSetName {
@@ -212,7 +223,7 @@ namespace Microsoft.Azure.Commands.PrivateDns.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Zone &apos;{0}&apos; was created in resource group &apos;{1}&apos;. The SOA record for this zone has been created automatically. Use Get-AzDnsRecordSet to retrieve it..
+        ///   Looks up a localized string similar to Zone &apos;{0}&apos; was created in resource group &apos;{1}&apos;. The SOA record for this zone has been created automatically. Use Get-AzPrivateDnsRecordSet to retrieve it..
         /// </summary>
         internal static string Success_NewPrivateZone {
             get {
@@ -221,7 +232,7 @@ namespace Microsoft.Azure.Commands.PrivateDns.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Record set &apos;{0}&apos; was created in zone &apos;{1}&apos;.The record set is empty. Use Add-AzDnsRecordConfig to add {2} records to it and Set-AzDnsRecordSet to save your changes..
+        ///   Looks up a localized string similar to Record set &apos;{0}&apos; was created in zone &apos;{1}&apos;.The record set is empty. Use Add-AzPrivateDnsRecordConfig to add {2} records to it and Set-AzPrivateDnsRecordSet to save your changes..
         /// </summary>
         internal static string Success_NewRecordSet {
             get {
@@ -230,7 +241,7 @@ namespace Microsoft.Azure.Commands.PrivateDns.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Zone &apos;{0}&apos; was created in resource group &apos;{1}&apos;. The SOA and authoritative NS records for this zone have been created automatically. Use Get-AzDnsRecordSet to retrieve them.
+        ///   Looks up a localized string similar to Zone &apos;{0}&apos; was created in resource group &apos;{1}&apos;. The SOA and authoritative NS records for this zone have been created automatically. Use Get-AzPrivateDnsRecordSet to retrieve them.
         /// </summary>
         internal static string Success_NewZone {
             get {
@@ -248,7 +259,7 @@ namespace Microsoft.Azure.Commands.PrivateDns.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Record added. Use Set-AzDnsRecordSet to save your change to this record set..
+        ///   Looks up a localized string similar to Record added. Use Set-AzPrivateDnsRecordSet to save your change to this record set..
         /// </summary>
         internal static string Success_RecordAdded {
             get {
@@ -257,7 +268,7 @@ namespace Microsoft.Azure.Commands.PrivateDns.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Record removed. Use Set-AzDnsRecordSet to save your change to this record set..
+        ///   Looks up a localized string similar to Record removed. Use Set-AzPrivateDnsRecordSet to save your change to this record set..
         /// </summary>
         internal static string Success_RecordRemoved {
             get {
