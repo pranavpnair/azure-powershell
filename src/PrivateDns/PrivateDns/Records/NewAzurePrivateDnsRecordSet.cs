@@ -16,11 +16,9 @@ namespace Microsoft.Azure.Commands.PrivateDns.Records
     /// <summary>
     /// Creates a new record set.
     /// </summary>
-    [Cmdlet("New", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "PrivateDnsRecordSet", DefaultParameterSetName = "Fields", SupportsShouldProcess = true),OutputType(typeof(PrivateDnsRecordSet))]
+    [Cmdlet("New", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "PrivateDnsRecordSet", SupportsShouldProcess = true),OutputType(typeof(PrivateDnsRecordSet))]
     public class NewAzurePrivateDnsRecordSet : PrivateDnsBaseCmdlet
     {
-        private uint? _ttlValue;
-
         [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, HelpMessage = "The name of the records in this record set (relative to the name of the zone and without a terminating dot).")]
         [ValidateNotNullOrEmpty]
         public string Name { get; set; }
@@ -46,11 +44,7 @@ namespace Microsoft.Azure.Commands.PrivateDns.Records
         [Parameter(Mandatory = false, ValueFromPipelineByPropertyName = true, HelpMessage = "The TTL value of all the records in this record set.", ParameterSetName = "AliasObject")]
         [Parameter(Mandatory = false, ValueFromPipelineByPropertyName = true, HelpMessage = "The TTL value of all the records in this record set.", ParameterSetName = "AliasFields")]
         [ValidateNotNullOrEmpty]
-        public uint Ttl
-        {
-            get => _ttlValue ?? 0;
-            set => _ttlValue = value;
-        }
+        public uint Ttl { get; set; }
 
         [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, HelpMessage = "The type of Private DNS records in this record set.")]
         [ValidateNotNullOrEmpty]
@@ -112,7 +106,7 @@ namespace Microsoft.Azure.Commands.PrivateDns.Records
                         zoneName,
                         resourceGroupname,
                         this.Name, 
-                        this._ttlValue,
+                        this.Ttl,
                         this.RecordType,
                         this.Metadata,
                         this.Overwrite,

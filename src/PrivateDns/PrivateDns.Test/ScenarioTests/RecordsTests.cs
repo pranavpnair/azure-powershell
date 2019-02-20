@@ -121,34 +121,6 @@ namespace Microsoft.Azure.Commands.PrivateDns.Tests.ScenarioTests
 
         [Fact]
         [Trait(Category.AcceptanceType, Category.CheckIn)]
-        public void TestRecordSetCAA()
-        {
-            PrivateDnsTestsBase.NewInstance.RunPowerShellTest(_logger, "Test-RecordSetCAA");
-        }
-
-        [Fact]
-        [Trait(Category.AcceptanceType, Category.CheckIn)]
-        public void TestRecordSetCAANonEmpty()
-        {
-            PrivateDnsTestsBase.NewInstance.RunPowerShellTest(_logger, "Test-RecordSetCAANonEmpty");
-        }
-
-        [Fact]
-        [Trait(Category.AcceptanceType, Category.CheckIn)]
-        public void TestRecordSetNS()
-        {
-            PrivateDnsTestsBase.NewInstance.RunPowerShellTest(_logger, "Test-RecordSetNS");
-        }
-
-        [Fact]
-        [Trait(Category.AcceptanceType, Category.CheckIn)]
-        public void TestRecordSetNSNonEmpty()
-        {
-            PrivateDnsTestsBase.NewInstance.RunPowerShellTest(_logger, "Test-RecordSetNSNonEmpty");
-        }
-
-        [Fact]
-        [Trait(Category.AcceptanceType, Category.CheckIn)]
         public void TestRecordSetTXT()
         {
             PrivateDnsTestsBase.NewInstance.RunPowerShellTest(_logger, "Test-RecordSetTXT");

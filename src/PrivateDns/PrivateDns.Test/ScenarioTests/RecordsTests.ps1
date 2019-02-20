@@ -94,13 +94,13 @@ function Test-AliasRecordSet
 	$zone = $resourceGroup | New-AzPrivateDnsZone -Name $zoneName 
 
 	# non alias record
-	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType $recordType -DnsRecords @()
+	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType $recordType -PrivateDnsRecords @()
 	$record = $record | Add-AzPrivateDnsRecordConfig -Ipv4Address 1.1.1.1
 	$record = $record | Set-AzPrivateDnsRecordSet
 	
 	# alias record pointing to non-alias record
 	$aliasRecordName = "alias" + $(getAssetname)
-	$createdRecord = New-AzPrivateDnsRecordSet -Name $aliasRecordName -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -RecordType $recordType -TargetResourceId $record.Id
+	$createdRecord = New-AzPrivateDnsRecordSet -Name $aliasRecordName -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -RecordType $recordType
 
 	Assert-NotNull $createdRecord
 	Assert-AreEqual $zoneName $createdRecord.ZoneName 
@@ -109,7 +109,7 @@ function Test-AliasRecordSet
 
 	$aliasRecord = $zone | Get-AzPrivateDnsRecordSet -Name $aliasRecordName -RecordType $recordType
 	$nonaliasRecord = $zone | Get-AzPrivateDnsRecordSet -Name $recordName -RecordType $recordType
-	Assert-AreEqual $record.Id $aliasRecord.TargetResourceId
+	Assert-AreEqual $record.Id $aliasRecord.Id
 
 	$nonaliasRecord | Remove-AzPrivateDnsRecordSet
 
@@ -171,7 +171,7 @@ function Test-RecordSetCrudTrimsDotFromZoneName
 
 <#
 .SYNOPSIS
-Full Record Set CRUD cycle
+Full Record Set CRUD cycle with piping
 #>
 function Test-RecordSetCrudWithPiping
 {
@@ -201,7 +201,7 @@ function Test-RecordSetCrudWithPiping
 
 <#
 .SYNOPSIS
-Full Record Set CRUD cycle
+Full Record Set CRUD cycle with zone name ending with dot
 #>
 function Test-RecordSetCrudWithPipingTrimsDotFromZoneName
 {
@@ -211,7 +211,7 @@ function Test-RecordSetCrudWithPipingTrimsDotFromZoneName
 	$recordName = getAssetname
     $zone = TestSetup-CreateResourceGroup | New-AzPrivateDnsZone -Name $zoneName
 	
-	$zoneObjectWithDot = New-Object Microsoft.Azure.Commands.Dns.DnsZone
+	$zoneObjectWithDot = New-Object Microsoft.Azure.Commands.PrivateDns.Models.PrivateDnsZone
 	$zoneObjectWithDot.Name = $zoneNameWithDot
 	$zoneObjectWithDot.ResourceGroupName = $zone.ResourceGroupName
 	
@@ -222,7 +222,7 @@ function Test-RecordSetCrudWithPipingTrimsDotFromZoneName
 	Assert-AreEqual $zoneName $createdRecord.ZoneName 
 	Assert-AreEqual $zone.ResourceGroupName $createdRecord.ResourceGroupName
 
-	$recordObjectWithDot = New-Object Microsoft.Azure.Commands.Dns.DnsRecordSet
+	$recordObjectWithDot = New-Object Microsoft.Azure.Commands.PrivateDns.Models.PrivateDnsRecordSet
 	$recordObjectWithDot.Name = $recordName
 	$recordObjectWithDot.ZoneName = $zoneNameWithDot
 	$recordObjectWithDot.ResourceGroupName = $zone.ResourceGroupName
@@ -259,7 +259,7 @@ function Test-RecordSetCrudWithPipingTrimsDotFromZoneName
 
 <#
 .SYNOPSIS
-Full Record Set CRUD cycle
+Full A Record Set CRUD cycle
 #>
 function Test-RecordSetA
 {
@@ -268,7 +268,7 @@ function Test-RecordSetA
     $resourceGroup = TestSetup-CreateResourceGroup 
 	$zone = $resourceGroup | New-AzPrivateDnsZone -Name $zoneName 
 
-	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType A -DnsRecords @()
+	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType A -PrivateDnsRecords @()
 
 	# add two records, remove one, remove another no-op
 	$record = $record | Add-AzPrivateDnsRecordConfig -Ipv4Address 1.1.1.1
@@ -297,7 +297,7 @@ function Test-RecordSetA
 
 <#
 .SYNOPSIS
-Full Record Set CRUD cycle
+Full non empty A Record Set CRUD cycle
 #>
 function Test-RecordSetANonEmpty
 {
@@ -309,7 +309,7 @@ function Test-RecordSetANonEmpty
 	$aRecords=@()
 	$aRecords += New-AzPrivateDnsRecordConfig -IPv4Address "192.168.0.1"
 	$aRecords += New-AzPrivateDnsRecordConfig -IPv4Address "192.168.0.2"
-	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType A -DnsRecords $aRecords
+	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType A -PrivateDnsRecords $aRecords
 	
 	$getResult = Get-AzPrivateDnsRecordSet -Name $recordName -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -RecordType A 
 	
@@ -333,7 +333,7 @@ function Test-RecordSetANonEmpty
 
 <#
 .SYNOPSIS
-Full Record Set CRUD cycle
+Full AAAA Record Set CRUD cycle
 #>
 function Test-RecordSetAAAA
 {
@@ -382,7 +382,7 @@ function Test-RecordSetAAAANonEmpty
 	$aaaaRecords=@()
 	$aaaaRecords += New-AzPrivateDnsRecordConfig  -IPv6Address "2002::1"
 	$aaaaRecords += New-AzPrivateDnsRecordConfig  -IPv6Address "2002::2"
-	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType AAAA -DnsRecords $aaaaRecords
+	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType AAAA -PrivateDnsRecords $aaaaRecords
 
 	$getResult = Get-AzPrivateDnsRecordSet -Name $recordName -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -RecordType AAAA
 	
@@ -401,7 +401,7 @@ function Test-RecordSetAAAANonEmpty
 
 <#
 .SYNOPSIS
-Full Record Set CRUD cycle
+Full CNAME Record Set CRUD cycle
 #>
 function Test-RecordSetCNAME
 {
@@ -445,7 +445,7 @@ function Test-RecordSetCNAMENonEmpty
 	$zone = $resourceGroup | New-AzPrivateDnsZone -Name $zoneName 
 
 	$records = New-AzPrivateDnsRecordConfig  -Cname "www.contoso.com"
-	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType CNAME -DnsRecords $records
+	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType CNAME -PrivateDnsRecords $records
 
 	$getResult = Get-AzPrivateDnsRecordSet -Name $recordName -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -RecordType CNAME 
 	
@@ -462,7 +462,7 @@ function Test-RecordSetCNAMENonEmpty
 
 <#
 .SYNOPSIS
-Full Record Set CRUD cycle
+Full MX Record Set CRUD cycle
 #>
 function Test-RecordSetMX
 {
@@ -502,7 +502,7 @@ function Test-RecordSetMX
 
 <#
 .SYNOPSIS
-Full Record Set CRUD cycle
+Full non empty MX Record Set CRUD cycle
 #>
 function Test-RecordSetMXNonEmpty
 {
@@ -513,7 +513,7 @@ function Test-RecordSetMXNonEmpty
 
 	$records = @();
 	$records += New-AzPrivateDnsRecordConfig  -Exchange mail2.theg.com -Preference 0
-	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType MX -DnsRecords $records
+	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType MX -PrivateDnsRecords $records
 
 	$getResult = Get-AzPrivateDnsRecordSet -Name $recordName -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -RecordType MX 
 	
@@ -531,84 +531,7 @@ function Test-RecordSetMXNonEmpty
 
 <#
 .SYNOPSIS
-Full Record Set CRUD cycle
-#>
-function Test-RecordSetNS
-{
-	$zoneName = Get-RandomZoneName
-	$recordName = getAssetname
-    $resourceGroup = TestSetup-CreateResourceGroup 
-	$zone = $resourceGroup | New-AzPrivateDnsZone -Name $zoneName 
-
-	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType NS
-
-	# add three records, remove one, remove another no-op
-	$record = $record | Add-AzPrivateDnsRecordConfig -Nsdname ns1.example.com
-	$record = $record | Add-AzPrivateDnsRecordConfig -Nsdname ns2.example.com
-	$record = $record | Add-AzPrivateDnsRecordConfig -Nsdname ns3.example.com
-	$record = $record | Remove-AzPrivateDnsRecordConfig -Nsdname ns3.example.com
-	$record = $record | Remove-AzPrivateDnsRecordConfig -Nsdname ns4.example.com
-
-	$record | Set-AzPrivateDnsRecordSet
-	$getResult = Get-AzPrivateDnsRecordSet -Name $recordName -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -RecordType NS 
-	
-	Assert-AreEqual 2 $getResult.Records.Count
-	Assert-AreEqual "ns1.example.com" $getResult.Records[0].Nsdname
-	Assert-AreEqual "ns2.example.com" $getResult.Records[1].Nsdname
-
-	$listResult = Get-AzPrivateDnsRecordSet -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -RecordType NS
-
-	# the authoritative NS record set will be the first result
-	Assert-AreEqual 2 $listResult.Count
-	Assert-AreEqual 2 $listResult[1].Records.Count
-	Assert-AreEqual "ns1.example.com" $listResult[1].Records[0].Nsdname
-	Assert-AreEqual "ns2.example.com" $listResult[1].Records[1].Nsdname
-
-	$removed = $listResult[1] | Remove-AzPrivateDnsRecordSet -Confirm:$false -PassThru
-
-	Assert-True { $removed }
-
-	Remove-AzPrivateDnsZone -Name $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -Confirm:$false
-	Remove-AzResourceGroup -Name $resourceGroup.ResourceGroupName -Force
-}
-
-function Test-RecordSetNSNonEmpty
-{
-	$zoneName = Get-RandomZoneName
-	$recordName = getAssetname
-    $resourceGroup = TestSetup-CreateResourceGroup 
-	$zone = $resourceGroup | New-AzPrivateDnsZone -Name $zoneName 
-
-	$records = @()
-	$records += New-AzPrivateDnsRecordConfig  -Nsdname ns1.example.com
-    $records += New-AzPrivateDnsRecordConfig  -Nsdname ns2.example.com
-	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType NS -DnsRecords $records
-
-	$getResult = Get-AzPrivateDnsRecordSet -Name $recordName -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -RecordType NS 
-	
-	Assert-AreEqual 2 $getResult.Records.Count
-	Assert-AreEqual "ns1.example.com" $getResult.Records[0].Nsdname
-	Assert-AreEqual "ns2.example.com" $getResult.Records[1].Nsdname
-
-	$listResult = Get-AzPrivateDnsRecordSet -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -RecordType NS
-
-	# the authoritative NS record set will be the first result
-	Assert-AreEqual 2 $listResult.Count
-	Assert-AreEqual 2 $listResult[1].Records.Count
-	Assert-AreEqual "ns1.example.com" $listResult[1].Records[0].Nsdname
-	Assert-AreEqual "ns2.example.com" $listResult[1].Records[1].Nsdname
-
-	$removed = $listResult[1] | Remove-AzPrivateDnsRecordSet -Confirm:$false -PassThru
-
-	Assert-True { $removed }
-
-	Remove-AzPrivateDnsZone -Name $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -Confirm:$false
-	Remove-AzResourceGroup -Name $resourceGroup.ResourceGroupName -Force
-}
-
-<#
-.SYNOPSIS
-Full Record Set CRUD cycle
+Full TXT Record Set CRUD cycle
 #>
 function Test-RecordSetTXT
 {
@@ -658,7 +581,7 @@ function Test-RecordSetTXTNonEmpty
 	$records += New-AzPrivateDnsRecordConfig  -Value text2
     $records += New-AzPrivateDnsRecordConfig  -Value text3
 
-	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType TXT -DnsRecords $records
+	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType TXT -PrivateDnsRecords $records
 
 	# add three records, remove one, remove another no-op
 
@@ -715,7 +638,7 @@ function Test-RecordSetTXTLengthValidation
 
 	$maxRecordTxt = Get-TxtOfSpecifiedLength 1024;
 	$maxRecord = New-AzPrivateDnsRecordConfig -Value $maxRecordTxt
-	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType TXT -DnsRecords $maxRecord ;
+	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType TXT -PrivateDnsRecords $maxRecord ;
 	Assert-AreEqual $maxRecordTxt $record.Records[0].Value;
 
 	$getResult = Get-AzPrivateDnsRecordSet -Name $recordName -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -RecordType TXT ;
@@ -771,7 +694,7 @@ function Test-RecordSetPTRNonEmpty
     $records = @()
 	$records += New-AzPrivateDnsRecordConfig   -PtrdName "contoso.com"
 
-    $record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType PTR -DnsRecords $records
+    $record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType PTR -PrivateDnsRecords $records
 	Assert-AreEqual 1 $record.Records.Count
 
 	$getResult = Get-AzPrivateDnsRecordSet -Name $recordName -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -RecordType PTR
@@ -787,7 +710,7 @@ function Test-RecordSetPTRNonEmpty
 
 <#
 .SYNOPSIS
-Full Record Set CRUD cycle
+Full SRV Record Set CRUD cycle
 #>
 function Test-RecordSetSRV
 {
@@ -838,7 +761,7 @@ function Test-RecordSetSRVNonEmpty
 
     $records = @()
 	$records += New-AzPrivateDnsRecordConfig  -Port 53 -Priority 1 -Target ns1.example.com -Weight 5
-	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType SRV -DnsRecords $records
+	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType SRV -PrivateDnsRecords $records
 
 	$record | Set-AzPrivateDnsRecordSet
 	$getResult = Get-AzPrivateDnsRecordSet -Name $recordName -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -RecordType SRV 
@@ -860,7 +783,7 @@ function Test-RecordSetSRVNonEmpty
 
 <#
 .SYNOPSIS
-Full Record Set CRUD cycle
+Full SOA Record Set CRUD cycle
 #>
 function Test-RecordSetSOA
 {
@@ -901,7 +824,7 @@ function Test-RecordSetSOA
 	Assert-AreEqual 321 $listResult[0].Records[0].MinimumTtl
 	Assert-AreEqual 110901 $listResult[0].Ttl
 
-	Assert-Throws { $listResult[0] | Remove-AzPrivateDnsRecordSet -Confirm:$false -PassThru } "RecordSets of type 'SOA' with name '@' cannot be deleted."
+	Assert-Throws { $listResult[0] | Remove-AzPrivateDnsRecordSet -Confirm:$false -PassThru } "Record sets of type 'SOA' with name '@' cannot be deleted."
 
 	Remove-AzPrivateDnsZone -Name $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -Confirm:$false
 	Remove-AzResourceGroup -Name $resourceGroup.ResourceGroupName -Force
@@ -916,71 +839,6 @@ function Validate-CAARecord(
 	Assert-AreEqual $flags $record.Flags
 	Assert-AreEqual $tag $record.Tag
 	Assert-AreEqual $value $record.Value
-}
-
-<#
-.SYNOPSIS
-Full Record Set CRUD cycle for CAA record
-#>
-function Test-RecordSetCAA
-{
-	$zoneName = Get-RandomZoneName
-	$recordName = getAssetname
-    $resourceGroup = TestSetup-CreateResourceGroup 
-	$zone = $resourceGroup | New-AzPrivateDnsZone -Name $zoneName 
-
-	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType CAA
-
-	# add two records, remove one, remove another no-op
-	$record = $record | Add-AzPrivateDnsRecordConfig -CaaFlags 0 -CaaTag issue -CaaValue "contoso.org"
-	#$record = $record | Add-AzPrivateDnsRecordConfig -CaaFlags 1 -CaaTag issuewild -CaaValue "contoso.org"
-	#$record = $record | Remove-AzPrivateDnsRecordConfig -CaaFlags 1 -CaaTag issuewild -CaaValue "contoso.org"
-	#$record = $record | Remove-AzPrivateDnsRecordConfig -CaaFlags 1 -CaaTag issuewild -CaaValue "contoso.org"
-
-	$record | Set-AzPrivateDnsRecordSet
-	$getResult = Get-AzPrivateDnsRecordSet -Name $recordName -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -RecordType CAA
-	
-	Assert-AreEqual 1 $getResult.Records.Count
-	Validate-CAARecord $getResult.Records[0] 0 "issue" "contoso.org"
-
-	$listResult = Get-AzPrivateDnsRecordSet -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -RecordType CAA
-
-	Assert-AreEqual 1 $listResult[0].Records.Count
-	Validate-CAARecord $listResult.Records[0] 0 "issue" "contoso.org"
-
-	$removed = $listResult[0] | Remove-AzPrivateDnsRecordSet -Confirm:$false -PassThru
-
-	Assert-True { $removed }
-
-	Remove-AzPrivateDnsZone -Name $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -Confirm:$false
-	Remove-AzResourceGroup -Name $resourceGroup.ResourceGroupName -Force
-}
-
-function Test-RecordSetCAANonEmpty
-{
-	$zoneName = Get-RandomZoneName
-	$recordName = getAssetname
-    $resourceGroup = TestSetup-CreateResourceGroup 
-	$zone = $resourceGroup | New-AzPrivateDnsZone -Name $zoneName 
-
-    $records = @()
-	$records += New-AzPrivateDnsRecordConfig  -CaaFlags 1 -CaaTag issuewild -CaaValue "contoso.org"
-	$records += New-AzPrivateDnsRecordConfig  -CaaFlags 0 -CaaTag issue -CaaValue "fabrikam.com"
-	$record = $zone | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType CAA -DnsRecords $records
-
-	$record | Set-AzPrivateDnsRecordSet
-	$getResult = Get-AzPrivateDnsRecordSet -Name $recordName -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -RecordType CAA
-	
-	Assert-AreEqual 2 $getResult.Records.Count
-	Validate-CAARecord $getResult.Records[0] 1 "issuewild" "contoso.org"
-	Validate-CAARecord $getResult.Records[1] 0 "issue" "fabrikam.com"
-
-	$removed = $getResult[0] | Remove-AzPrivateDnsRecordSet -Confirm:$false -PassThru
-
-	Assert-True { $removed }
-
-	Remove-AzPrivateDnsZone -Name $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -Confirm:$false
-	Remove-AzResourceGroup -Name $resourceGroup.ResourceGroupName -Force
 }
 
 <#
@@ -1014,7 +872,7 @@ function Test-RecordSetNewAlreadyExists
 
 <#
 .SYNOPSIS
-Full Record Set CRUD cycle
+Test to check addition of mismatching records to recordsets
 #>
 function Test-RecordSetAddRecordTypeMismatch
 {
@@ -1053,7 +911,7 @@ function Test-RecordSetAddTwoCnames
 
 <#
 .SYNOPSIS
-Full Record Set CRUD cycle
+Test to try removing mismatching record type from recordset
 #>
 function Test-RecordSetRemoveRecordTypeMismatch
 {
@@ -1062,7 +920,7 @@ function Test-RecordSetRemoveRecordTypeMismatch
     $recordSet = TestSetup-CreateResourceGroup | New-AzPrivateDnsZone -Name $zoneName | New-AzPrivateDnsRecordSet -Name $recordName -Ttl 100 -RecordType TXT
 	$resourceGroupName = $recordSet.ResourceGroupName
 
-	Assert-Throws { $recordSet | Remove-AzPrivateDnsRecordConfig -Nsdname nsa.fed.gov } "Cannot remove a record of type NS from a record set of type TXT. The types must match."
+	Assert-Throws { $recordSet | Remove-AzPrivateDnsRecordConfig -Cname nsa.fed.gov } "Cannot remove a record of type CNAME from a record set of type TXT. The types must match."
 
 	$recordSet | Remove-AzPrivateDnsRecordSet -Confirm:$false
 	Remove-AzPrivateDnsZone -Name $recordSet.ZoneName -ResourceGroupName $recordSet.ResourceGroupName -Confirm:$false
@@ -1113,10 +971,7 @@ function Test-RecordSetGet
 	$resourceGroupName = $zone.ResourceGroupName
 
 	# test for root records
-	$nsRecords = Get-AzPrivateDnsRecordSet -Zone $zone -RecordType NS
 	$soaRecords = Get-AzPrivateDnsRecordSet -Zone $zone -RecordType SOA
-
-	Assert-AreEqual 1 $nsRecords.Count
 	Assert-AreEqual 1 $soaRecords.Count
 
 	# test for non-root records
@@ -1134,7 +989,7 @@ function Test-RecordSetGet
 	# all records
 	$allRecords = Get-AzPrivateDnsRecordSet -Zone $zone
 
-	Assert-AreEqual 5 $allRecords.Count
+	Assert-AreEqual 4 $allRecords.Count
 	
 	$zone | Remove-AzPrivateDnsRecordSet -Name $recordName1 -RecordType AAAA -Confirm:$false
 	$zone | Remove-AzPrivateDnsRecordSet -Name $recordName2 -RecordType AAAA -Confirm:$false
@@ -1203,7 +1058,7 @@ function Test-RecordSetEndsWithZoneName
 	$resourceGroup = TestSetup-CreateResourceGroup
 	$zone = New-AzPrivateDnsZone -Name $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName
 
-	$message = [System.String]::Format("The relative record set name `"{0}`" includes the zone name `"{1}`". This will result in the set name `"{0}.{1}`". Usage of this cmdlet without DnsRecords parameter will be deprecated soon. If there is a need to create empty record set, please specify DnsRecords parameter with an empty array as value Microsoft.Azure.Commands.Dns.DnsRecordSet", $recordName, $zoneName);
+	$message = [System.String]::Format("The relative record set name `"{0}`" includes the zone name `"{1}`". This will result in the set name `"{0}.{1}`". Usage of this cmdlet without PrivateDnsRecords parameter will be deprecated soon. If there is a need to create empty record set, please specify PrivateDnsRecords parameter with an empty array as value Microsoft.Azure.Commands.PrivateDns.Models.PrivateDnsRecordSet", $recordName, $zoneName);
 	 $warning = (New-AzPrivateDnsRecordSet -Name $recordName -RecordType A -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -Ttl 100) 3>&1
 
 	Assert-AreEqual $message $warning

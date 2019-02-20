@@ -67,7 +67,7 @@ namespace Microsoft.Azure.Commands.Dns
             }
         }
 
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, HelpMessage = "The type of DNS records in this record set.")]
+        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, HelpMessage = "The type of Private DNS records in this record set.")]
         [ValidateNotNullOrEmpty]
         public RecordType RecordType { get; set; }
 
@@ -78,7 +78,7 @@ namespace Microsoft.Azure.Commands.Dns
         [Parameter(Mandatory = false, ValueFromPipelineByPropertyName = true, HelpMessage = "A hash table which represents resource tags.")]
         public Hashtable Metadata { get; set; }
 
-        [Parameter(Mandatory = false, ValueFromPipeline = true, HelpMessage = "The dns records that are part of this record set.")]
+        [Parameter(Mandatory = false, ValueFromPipeline = true, HelpMessage = "The private dns records that are part of this record set.")]
         [ValidateNotNull]
         public DnsRecordBase[] DnsRecords { get; set; }
 
