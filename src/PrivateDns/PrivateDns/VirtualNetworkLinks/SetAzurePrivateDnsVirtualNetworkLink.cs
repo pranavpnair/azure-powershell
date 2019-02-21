@@ -37,6 +37,7 @@ namespace Microsoft.Azure.Commands.PrivateDns.VirtualNetworkLinks
         public string Name { get; set; }
 
         [Parameter(Mandatory = false, ValueFromPipelineByPropertyName = true, HelpMessage = "Boolean that represents if registration is enabled on the link.", ParameterSetName = FieldsParameterSetName)]
+        [Parameter(Mandatory = false, ValueFromPipelineByPropertyName = true, HelpMessage = "Boolean that represents if registration is enabled on the link.", ParameterSetName = ResourceParameterSetName)]
         [ValidateNotNullOrEmpty]
         public bool IsRegistrationEnabled { get; set; }
 
@@ -49,7 +50,6 @@ namespace Microsoft.Azure.Commands.PrivateDns.VirtualNetworkLinks
         public PrivateDnsLink Link { get; set; }
 
         [Parameter(Mandatory = false, HelpMessage = "Do not use the ETag field of the RecordSet parameter for optimistic concurrency checks.", ParameterSetName = ObjectParameterSetName)]
-        [Parameter(Mandatory = false, HelpMessage = "Do not use the ETag field of the RecordSet parameter for optimistic concurrency checks.", ParameterSetName = ResourceParameterSetName)]
         public SwitchParameter Overwrite { get; set; }
 
         [Parameter( ParameterSetName = ResourceParameterSetName, Mandatory = true, ValueFromPipeline = true, HelpMessage = "Private DNS Zone ResourceID.")]

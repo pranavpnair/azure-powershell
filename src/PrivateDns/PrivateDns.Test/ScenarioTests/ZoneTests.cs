@@ -4,7 +4,7 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace Microsoft.Azure.Commands.PrivateDns.Tests.ScenarioTests
+namespace Microsoft.Azure.Commands.PrivateDns.Test.ScenarioTests
 {
     using Microsoft.Azure.ServiceManagement.Common.Models;
     using Microsoft.WindowsAzure.Commands.ScenarioTest;

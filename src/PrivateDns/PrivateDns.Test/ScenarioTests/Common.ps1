@@ -105,3 +105,15 @@ function Get-TxtOfSpecifiedLength([int] $length)
 	}
 	return $returnValue;
 }
+
+function Create-VirtualNetworkLink([bool] $registrationEnabled)
+{
+	$zoneName = Get-RandomZoneName
+	$linkName = Get-RandomLinkName
+    $resourceGroup = TestSetup-CreateResourceGroup
+
+	$createdZone = New-AzPrivateDnsZone -Name $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -Tags @{tag1="value1"}
+	$createdVirtualNetwork = TestSetup-CreateVirtualNetwork $resourceGroup
+	$createdLink = New-AzPrivateDnsVirtualNetworkLink -ZoneName $zoneName -ResourceGroupName $resourceGroup.ResourceGroupName -Name $linkName -Tags @{tag1="value1"} -VirtualNetworkId $createdVirtualNetwork.Id -IsRegistrationEnabled $registrationEnabled
+	return $createdLink
+}
