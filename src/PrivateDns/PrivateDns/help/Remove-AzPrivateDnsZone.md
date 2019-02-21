@@ -1,6 +1,6 @@
-﻿---
-external help file: Microsoft.Azure.PowerShell.Cmdlets.Dns.dll-Help.xml
-Module Name: Az.Dns
+---
+external help file: Microsoft.Azure.PowerShell.Cmdlets.PrivateDns.dll-Help.xml
+Module Name: Az.PrivateDns
 ms.assetid: A8E230A0-5057-40BC-81CD-6D397A503A84
 online version: https://docs.microsoft.com/en-us/powershell/module/az.dns/remove-azdnszone
 schema: 2.0.0
@@ -21,8 +21,14 @@ Remove-AzPrivateDnsZone -Name <String> -ResourceGroupName <String> [-PassThru]
 
 ### Object
 ```
-Remove-AzPrivateDnsZone -Zone <DnsZone> [-Overwrite] [-PassThru] [-DefaultProfile <IAzureContextContainer>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-AzPrivateDnsZone -Zone <PrivateDnsZone> [-Overwrite] [-PassThru]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### ResourceId
+```
+Remove-AzPrivateDnsZone -ResourceId <String> [-Overwrite] [-PassThru]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -84,7 +90,7 @@ This can be suppressed using the *Overwrite* parameter, which deletes the zone r
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Object
+Parameter Sets: Object, ResourceId
 Aliases:
 
 Required: False
@@ -126,13 +132,28 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
+### -ResourceId
+Private DNS Zone ResourceID.
+
+```yaml
+Type: System.String
+Parameter Sets: ResourceId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -Zone
 Specifies the DNS zone to delete.
 The **DnsZone** object passed can also be passed via the pipeline.
 Alternatively, you can specify the DNS zone to delete by using the *ZoneName* and *ResourceGroupName* parameters.
 
 ```yaml
-Type: Microsoft.Azure.Commands.PrivateDns.PrivateDnsZone
+Type: Microsoft.Azure.Commands.PrivateDns.Models.PrivateDnsZone
 Parameter Sets: Object
 Aliases:
 
@@ -181,7 +202,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.String
 
-### Microsoft.Azure.Commands.PrivateDns.PrivateDnsZone
+### Microsoft.Azure.Commands.PrivateDns.Models.PrivateDnsZone
 
 ## OUTPUTS
 

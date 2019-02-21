@@ -1,4 +1,4 @@
-﻿---
+---
 external help file: Microsoft.Azure.PowerShell.Cmdlets.PrivateDns.dll-Help.xml
 Module Name: Az.PrivateDns
 ms.assetid: A8E230A0-5057-40BC-81CD-6D397A503A84
@@ -15,20 +15,20 @@ Removes a virtual network link from a resource group.
 
 ### Fields
 ```
-Remove-AzPrivateDnsVirtualNetworkLink -Name <String> -ResourceGroupName <String> -ZoneName <String> [-PassThru]
+Remove-AzPrivateDnsVirtualNetworkLink -Name <String> -ZoneName <String> -ResourceGroupName <String> [-PassThru]
  [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Object
 ```
-Remove-AzPrivateDnsVirtualNetworkLink -Link <PrivateDnsLink> [-Overwrite] [-PassThru] [-DefaultProfile <IAzureContextContainer>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-AzPrivateDnsVirtualNetworkLink -Link <PrivateDnsLink> [-Overwrite] [-PassThru]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### ResourceId
 ```
-Remove-AzPrivateDnsVirtualNetworkLink -ResourceId <String> [-Overwrite] [-PassThru] [-DefaultProfile <IAzureContextContainer>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-AzPrivateDnsVirtualNetworkLink -ResourceId <String> [-Overwrite] [-PassThru]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -65,20 +65,20 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ZoneName
-Specifies the name of the private DNS zone that the link is associated with.
-You must also specify the *ResourceGroupName* and *Name* parameter.
-Alternatively, you can specify the link using the *Link* parameter.
+### -Link
+Specifies the link to delete.
+The **PrivateDnsLink** object passed can also be passed via the pipeline.
+Alternatively, you can specify the link to delete by using the *Name* *ZoneName* and *ResourceGroupName* parameters.
 
 ```yaml
-Type: System.String
-Parameter Sets: Fields
+Type: Microsoft.Azure.Commands.PrivateDns.Models.PrivateDnsLink
+Parameter Sets: Object
 Aliases:
 
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -106,7 +106,7 @@ This can be suppressed using the *Overwrite* parameter, which deletes the zone r
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
-Parameter Sets: Object
+Parameter Sets: Object, ResourceId
 Aliases:
 
 Required: False
@@ -148,14 +148,12 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -Link
-Specifies the link to delete.
-The **PrivateDnsLink** object passed can also be passed via the pipeline.
-Alternatively, you can specify the link to delete by using the *Name* *ZoneName* and *ResourceGroupName* parameters.
+### -ResourceId
+Specifies the ARM resource ID of the link.
 
 ```yaml
-Type: Microsoft.Azure.Commands.PrivateDns.PrivateDnsLink
-Parameter Sets: Object
+Type: System.String
+Parameter Sets: ResourceId
 Aliases:
 
 Required: True
@@ -165,8 +163,10 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ResourceId
-Specifies the ARM resource ID of the link.
+### -ZoneName
+Specifies the name of the private DNS zone that the link is associated with.
+You must also specify the *ResourceGroupName* and *Name* parameter.
+Alternatively, you can specify the link using the *Link* parameter.
 
 ```yaml
 Type: System.String
@@ -218,7 +218,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.String
 
-### Microsoft.Azure.Commands.PrivateDns.PrivateDnsLink
+### Microsoft.Azure.Commands.PrivateDns.Models.PrivateDnsLink
 
 ## OUTPUTS
 

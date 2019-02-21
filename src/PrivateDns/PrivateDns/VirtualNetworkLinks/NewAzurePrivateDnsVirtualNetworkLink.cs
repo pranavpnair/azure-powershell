@@ -35,7 +35,7 @@ namespace Microsoft.Azure.Commands.PrivateDns.VirtualNetworkLinks
         [ValidateNotNullOrEmpty]
         public string ZoneName { get; set; }
 
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, HelpMessage = "The name of the virtual network associated with the link.")]
+        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, HelpMessage = "The resource id of the virtual network associated with the link.")]
         [ValidateNotNullOrEmpty]
         public string VirtualNetworkId { get; set; }
 

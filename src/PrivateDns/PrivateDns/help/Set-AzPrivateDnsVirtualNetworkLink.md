@@ -1,4 +1,4 @@
-﻿---
+---
 external help file: Microsoft.Azure.PowerShell.Cmdlets.PrivateDns.dll-Help.xml
 Module Name: Az.PrivateDns
 ms.assetid: A8E230A0-5057-40BC-81CD-6D397A503A84
@@ -15,20 +15,21 @@ Sets/Updates a virtual network link associated with a private zone and a resourc
 
 ### Fields
 ```
-Set-AzPrivateDnsVirtualNetworkLink -ZoneName <String> -Name <String> -ResourceGroupName <String> [-IsRegistrationEnabled <bool>] [-Tags <Hashtable>] [-PassThru]
- [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
-```
-
-### Object
-```
-Set-AzPrivateDnsVirtualNetworkLink -Link <PrivateDnsLink> [-Overwrite] [-PassThru] [-DefaultProfile <IAzureContextContainer>] [-WhatIf]
+Set-AzPrivateDnsVirtualNetworkLink -ResourceGroupName <String> -ZoneName <String> -Name <String>
+ [-IsRegistrationEnabled <Boolean>] [-Tags <Hashtable>] [-DefaultProfile <IAzureContextContainer>] [-WhatIf]
  [-Confirm] [<CommonParameters>]
 ```
 
 ### ResourceId
 ```
-Set-AzPrivateDnsVirtualNetworkLink -ResourceId <String> [-IsRegistrationEnabled <bool>] [-Tags <Hashtable>] [-Overwrite] [-PassThru] [-DefaultProfile <IAzureContextContainer>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Set-AzPrivateDnsVirtualNetworkLink [-IsRegistrationEnabled <Boolean>] [-Tags <Hashtable>] -ResourceId <String>
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### Object
+```
+Set-AzPrivateDnsVirtualNetworkLink -Link <PrivateDnsLink> [-Overwrite]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -65,26 +66,41 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Name
-Specifies the name of the link that this cmdlet removes.
-You must also specify the *ResourceGroupName* and *ZoneName* parameter.
-Alternatively, you can specify the private DNS link using the *link* parameter.
+### -IsRegistrationEnabled
+Boolean that represents if registration is enabled on the link.
 
 ```yaml
-Type: System.String
-Parameter Sets: Fields
+Type: System.Boolean
+Parameter Sets: Fields, ResourceId
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -ZoneName
-Specifies the name of the DNS zone that this cmdlet removes.
-You must also specify the *Name* and *ResourceGroupName* parameter.
+### -Link
+Specifies the virtual network link to delete.
+The **PrivateDnsLink** object passed can also be passed via the pipeline.
+Alternatively, you can specify the link to delete by using the *Name* *ZoneName* and *ResourceGroupName* parameters.
+
+```yaml
+Type: Microsoft.Azure.Commands.PrivateDns.Models.PrivateDnsLink
+Parameter Sets: Object
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -Name
+Specifies the name of the link that this cmdlet removes.
+You must also specify the *ResourceGroupName* and *ZoneName* parameter.
 Alternatively, you can specify the private DNS link using the *link* parameter.
 
 ```yaml
@@ -116,21 +132,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -PassThru
-passthru
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -ResourceGroupName
 Specifies the name of the resource group that contains the link to remove.
 You must also specify the *ZoneName* and *Name* parameter.
@@ -148,20 +149,50 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -Link
-Specifies the virtual network link to delete.
-The **PrivateDnsLink** object passed can also be passed via the pipeline.
-Alternatively, you can specify the link to delete by using the *Name* *ZoneName* and *ResourceGroupName* parameters.
+### -ResourceId
+Private DNS Zone ResourceID.
 
 ```yaml
-Type: Microsoft.Azure.Commands.PrivateDns.PrivateDnsLink
-Parameter Sets: Object
+Type: System.String
+Parameter Sets: ResourceId
 Aliases:
 
 Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -Tags
+A hash table which represents resource tags.
+
+```yaml
+Type: System.Collections.Hashtable
+Parameter Sets: Fields, ResourceId
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -ZoneName
+Specifies the name of the DNS zone that this cmdlet removes.
+You must also specify the *Name* and *ResourceGroupName* parameter.
+Alternatively, you can specify the private DNS link using the *link* parameter.
+
+```yaml
+Type: System.String
+Parameter Sets: Fields
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -203,11 +234,15 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.String
 
-### Microsoft.Azure.Commands.PrivateDns.PrivateDnsLink
+### System.Boolean
+
+### System.Collections.Hashtable
+
+### Microsoft.Azure.Commands.PrivateDns.Models.PrivateDnsLink
 
 ## OUTPUTS
 
-### System.Boolean
+### Microsoft.Azure.Commands.PrivateDns.Models.PrivateDnsZone
 
 ## NOTES
 Due to the potentially high impact of deleting a virtual network link, by default, this cmdlet prompts for confirmation if the $ConfirmPreference Windows PowerShell variable has any value other than None.

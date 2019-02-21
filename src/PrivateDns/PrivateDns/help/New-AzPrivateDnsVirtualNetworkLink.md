@@ -1,4 +1,4 @@
-﻿---
+---
 external help file: Microsoft.Azure.PowerShell.Cmdlets.PrivateDns.dll-Help.xml
 Module Name: Az.PrivateDns
 ms.assetid: B78F3E8B-C7D2-458C-AB23-06F584FE97E0
@@ -13,9 +13,10 @@ Creates a new private DNS virtual network link.
 
 ## SYNTAX
 
-### Ids (Default)
 ```
-New-AzPrivateDnsVirtualNetworkLink -Name <String> -ResourceGroupName <String> -ZoneName <String> -VirtualNetworkId <String> -IsRegistrationEnabled <String> [-Tags <Hashtable>] [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-AzPrivateDnsVirtualNetworkLink -Name <String> -ResourceGroupName <String> -ZoneName <String>
+ -VirtualNetworkId <String> -IsRegistrationEnabled <Boolean> [-Tags <Hashtable>]
+ [-DefaultProfile <IAzureContextContainer>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -27,7 +28,7 @@ whether the cmdlet prompts you for confirmation.
 
 ## EXAMPLES
 
-### Example 1: Create a DNS zone
+### Example 1: Create a Private DNS virtual network link
 ```
 PS C:\>$Link = New-AzPrivateDnsVirtualNetworkLink -ZoneName "myzone.com" -ResourceGroupName "MyResourceGroup" -Name "mylink" -VirtualNetworkId "myvirtualnetwork" -IsRegistrationEnabled $true
 ```
@@ -51,11 +52,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Name
-Specifies the name of the virtual network link to create.
+### -IsRegistrationEnabled
+Boolean that represents if the link is registration enabled or not.
 
 ```yaml
-Type: System.String
+Type: System.Boolean
 Parameter Sets: (All)
 Aliases:
 
@@ -65,8 +66,9 @@ Default value: None
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
-### -ZoneName
-Specifies the name of the zone which will be linked to the virtual network link.
+
+### -Name
+Specifies the name of the virtual network link to create.
 
 ```yaml
 Type: System.String
@@ -102,8 +104,39 @@ Key-value pairs in the form of a hash table. For example:
 ```yaml
 Type: System.Collections.Hashtable
 Parameter Sets: (All)
+Aliases:
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -VirtualNetworkId
+The resource id of the virtual network associated with the link.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -ZoneName
+Specifies the name of the zone which will be linked to the virtual network link.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName)
@@ -147,15 +180,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### System.String
 
+### System.Boolean
+
 ### System.Collections.Hashtable
-
-### System.Collections.Generic.List`1[[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]
-
-### System.Collections.Generic.List`1[[Microsoft.Azure.Management.Internal.Network.Common.IResourceReference, Microsoft.Azure.PowerShell.Clients.Network, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35]]
 
 ## OUTPUTS
 
-### Microsoft.Azure.Commands.PrivateDns.PrivateDnsLink
+### Microsoft.Azure.Commands.PrivateDns.Models.PrivateDnsZone
 
 ## NOTES
 You can use the *Confirm* parameter to control whether this cmdlet prompts you for confirmation.
