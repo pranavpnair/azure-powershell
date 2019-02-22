@@ -1,8 +1,14 @@
-﻿# ------------------------------------------------------------------------------------------------
-# <copyright file="LinkTests.ps1" company="Microsoft Corporation">
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# </copyright>
-# ------------------------------------------------------------------------------------------------
+﻿# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ----------------------------------------------------------------------------------
+
 
 <#
 .SYNOPSIS
@@ -69,6 +75,69 @@ function Test-LinkCrud
 
 <#
 .SYNOPSIS
+Full Link CRUD cycle with piping
+#>
+function Test-LinkCrudWithPiping
+{
+	$createdLink = Create-VirtualNetworkLink $false
+
+	Assert-NotNull $createdLink
+	Assert-NotNull $createdLink.Etag
+	Assert-NotNull $createdLink.Name
+	Assert-NotNull $createdLink.ZoneName
+	Assert-NotNull $createdLink.ResourceGroupName
+	Assert-AreEqual 1 $createdLink.Tags.Count
+	Assert-AreEqual $false $createdLink.RegistrationEnabled
+	Assert-AreNotEqual $createdLink.VirtualNetworkId $createdZone.VirtualNetworkId
+	Assert-AreEqual $createdLink.ProvisioningState "Succeeded"
+	Assert-Null $createdLink.Type
+
+	$retrievedLink = Get-AzPrivateDnsVirtualNetworkLink -ZoneName $createdLink.ZoneName -ResourceGroupName $createdLink.ResourceGroupName -Name $createdLink.Name
+
+	Assert-NotNull $retrievedLink
+	Assert-NotNull $retrievedLink.Etag
+	Assert-AreEqual $createdLink.Name $retrievedLink.Name
+	Assert-AreEqual $createdLink.ResourceGroupName $retrievedLink.ResourceGroupName
+	Assert-AreEqual $retrievedLink.Etag $createdLink.Etag
+	Assert-AreEqual 1 $retrievedLink.Tags.Count
+	Assert-AreEqual $createdLink.VirtualNetworkId $retrievedLink.VirtualNetworkId
+	Assert-AreEqual $createdLink.ZoneName $retrievedLink.ZoneName
+	Assert-AreEqual $createdLink.RegistrationEnabled $retrievedLink.RegistrationEnabled
+	Assert-AreEqual $retrievedLink.ProvisioningState "Succeeded"
+	Assert-Null $retrievedLink.Type
+
+	$updatedLink = $createdLink | Set-AzPrivateDnsVirtualNetworkLink -Tags @{tag1="value1";tag2="value2"}
+
+	Assert-NotNull $updatedLink
+	Assert-NotNull $updatedLink.Etag
+	Assert-AreEqual $createdLink.Name $updatedLink.Name
+	Assert-AreEqual $createdLink.ResourceGroupName $updatedLink.ResourceGroupName
+	Assert-AreNotEqual $updatedLink.Etag $createdLink.Etag
+	Assert-AreEqual 2 $updatedLink.Tags.Count
+	Assert-AreEqual $updatedLink.ProvisioningState "Succeeded"
+	Assert-Null $updatedLink.Type
+
+	$retrievedLink = Get-AzPrivateDnsVirtualNetworkLink -ZoneName $createdLink.ZoneName -ResourceGroupName $createdLink.ResourceGroupName -Name $createdLink.Name
+
+	Assert-NotNull $retrievedLink
+	Assert-NotNull $retrievedLink.Etag
+	Assert-AreEqual $createdLink.Name $retrievedLink.Name
+	Assert-AreEqual $createdLink.ResourceGroupName $retrievedLink.ResourceGroupName
+	Assert-AreEqual $retrievedLink.Etag $updatedLink.Etag
+	Assert-AreEqual 2 $retrievedLink.Tags.Count
+	Assert-AreEqual $retrievedLink.ProvisioningState "Succeeded"
+	Assert-Null $retrievedLink.Type
+
+	$removed = $retrievedLink | Remove-AzPrivateDnsVirtualNetworkLink -PassThru -Confirm:$false
+
+	Assert-True { $removed }
+
+	Assert-Throws { Get-AzPrivateDnsVirtualNetworkLink -ZoneName $createdLink.ZoneName -ResourceGroupName $createdLink.ResourceGroupName -Name $createdLink.Name }
+	Remove-AzResourceGroup -Name $createdLink.ResourceGroupName -Force	
+}
+
+<#
+.SYNOPSIS
 Test registration link creation
 #>
 function Test-RegistrationLinkCreate
@@ -123,7 +192,7 @@ Test link update with resource Id
 function Test-UpdateLinkRegistrationStatusWithPipingResourceId
 {
 	$createdLink = Create-VirtualNetworkLink $false
-	$updatedLink = $createdLink.ResourceId | Set-AzPrivateDnsVirtualNetworkLink -IsRegistrationEnabled $true -Tags @()
+	$updatedLink = $createdLink.ResourceId | Set-AzPrivateDnsVirtualNetworkLink -IsRegistrationEnabled $true -Tags @{}
 	
 	Assert-AreEqual $updatedLink.RegistrationEnabled $true
 	Assert-AreEqual 0 $updatedLink.Tags.Count
@@ -263,7 +332,7 @@ function Test-RemoveLinkLinkNotExistsShouldNotThrow
 	$message = "*The resource * under resource group * was not found*"
 	Remove-AzPrivateDnsVirtualNetworkLink -ZoneName $createdLink.ZoneName -ResourceGroupName $createdLink.ResourceGroupName -Name "nonexistinglink"
 
-	$getLink = Get-AzPrivateDnsVirtualNetworkLink ZoneName $createdLink.ZoneName -ResourceGroupName $createdLink.ResourceGroupName -Name $createdLink.Name
+	$getLink = Get-AzPrivateDnsVirtualNetworkLink -ZoneName $createdLink.ZoneName -ResourceGroupName $createdLink.ResourceGroupName -Name $createdLink.Name
 	Assert-NotNull $getLink
 	Assert-AreEqual $getLink.RegistrationEnabled $false
 

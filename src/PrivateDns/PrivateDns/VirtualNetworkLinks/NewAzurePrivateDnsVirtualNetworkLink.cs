@@ -1,10 +1,13 @@
-﻿// ------------------------------------------------------------------------------------------------
-// <copyright file="NewAzurePrivateDnsVirtualNetworkLink.cs" company="Microsoft Corporation">
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// </copyright>
-// ------------------------------------------------------------------------------------------------
-
-using Microsoft.Azure.Commands.PrivateDns.Utilities;
+﻿// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ----------------------------------------------------------------------------------
 
 namespace Microsoft.Azure.Commands.PrivateDns.VirtualNetworkLinks
 {
@@ -22,28 +25,28 @@ namespace Microsoft.Azure.Commands.PrivateDns.VirtualNetworkLinks
     {
         private const string IdsParameterSetName = "Ids";
 
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, HelpMessage = "The full name of the link.")]
-        [ValidateNotNullOrEmpty]
-        public string Name { get; set; }
-
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, HelpMessage = "The resource group in which to create the zone.")]
+        [Parameter(Mandatory = true, HelpMessage = "The resource group in which to create the zone.")]
         [ResourceGroupCompleter]
         [ValidateNotNullOrEmpty]
         public string ResourceGroupName { get; set; }
 
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, HelpMessage = "The full name of the zone associated with the link (without a terminating dot).")]
+        [Parameter(Mandatory = true, HelpMessage = "The full name of the zone associated with the link (without a terminating dot).")]
         [ValidateNotNullOrEmpty]
         public string ZoneName { get; set; }
 
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, HelpMessage = "The resource id of the virtual network associated with the link.")]
+        [Parameter(Mandatory = true, HelpMessage = "The full name of the link.")]
+        [ValidateNotNullOrEmpty]
+        public string Name { get; set; }
+
+        [Parameter(Mandatory = true, HelpMessage = "The resource id of the virtual network associated with the link.")]
         [ValidateNotNullOrEmpty]
         public string VirtualNetworkId { get; set; }
 
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true, HelpMessage = "Boolean that represents if the link is registration enabled or not.")]
+        [Parameter(Mandatory = true, HelpMessage = "Boolean that represents if the link is registration enabled or not.")]
         [ValidateNotNullOrEmpty]
         public bool IsRegistrationEnabled { get; set; }
 
-        [Parameter(Mandatory = false, ValueFromPipelineByPropertyName = true, HelpMessage = "A hash table which represents resource tags.")]
+        [Parameter(Mandatory = false, HelpMessage = "A hash table which represents resource tags.")]
         public Hashtable Tags { get; set; }
 
         public override void ExecuteCmdlet()

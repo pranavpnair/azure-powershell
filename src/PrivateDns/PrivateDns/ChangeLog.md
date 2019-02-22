@@ -19,5 +19,5 @@
 -->
 ## Upcoming Release
 
-## Version 1.0.0
-* General availability of `Az.Dns` module
+## Version 0.1.0
+* General availability of `Az.PrivateDns` module
